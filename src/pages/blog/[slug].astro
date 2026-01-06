@@ -2,9 +2,11 @@
 import { CollectionEntry, getCollection } from "astro:content";
 import { BlogSchema } from "../../content/config";
 import PostLayout from "../../layouts/PostLayout.astro";
-import createSlug from "../../lib/createSlug"
+import { BLOG_ENABLED } from "../../lib/featureFlags";
+import createSlug from "../../lib/createSlug";
 
 export async function getStaticPaths() {
+  if (!BLOG_ENABLED) return [];
   const postEntries = await getCollection("blog");
   return postEntries.map((entry) => ({
     params: { slug: createSlug(entry.data.title, entry.slug) },
@@ -21,7 +23,12 @@ const post: BlogSchema = entry.data;
 const { Content } = await entry.render();
 ---
 
-<PostLayout
+{!BLOG_ENABLED ? (
+  <main class="container">
+    <h1>Blog staat uit</h1>
+  </main>
+) : (
+  <PostLayout
   title={post.title}
   description={post.description}
   pubDate={post.pubDate}
@@ -32,3 +39,4 @@ const { Content } = await entry.render();
 >
   <Content />
 </PostLayout>
+) }

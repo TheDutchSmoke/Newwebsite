@@ -1,0 +1,11 @@
+---
+import { BLOG_ENABLED } from "../lib/featureFlags";
+---
+
+<header class="container mx-auto py-4">
+  <nav class="flex items-center gap-4">
+    <a href="/" class="font-semibold">Home</a>
+    {BLOG_ENABLED ? <a href="/blog">Blog</a> : null}
+    <a href="/projects">Projects</a>
+  </nav>
+</header>
